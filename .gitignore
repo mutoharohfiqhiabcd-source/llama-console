@@ -1,0 +1,13 @@
+# 运行时产物，不进版本库
+server.log
+server.err.log
+usage/usage.json
+usage/sample.bat
+
+# 自检/调试产物
+_layout.txt
+*.tmp
+
+# Windows
+Thumbs.db
+desktop.ini

@@ -1,0 +1,75 @@
+{
+  "_help": "这是唯一需要你改的文件。改完双击桌面快捷方式即可，不需要重新安装。",
+
+  "ui": {
+    "title": "本地模型控制台",
+    "windowWidth": 720,
+    "windowHeight": 620
+  },
+
+  "llama": {
+    "_help": "llamaServer 指向 llama-server.exe；model 指向 .gguf。其余留空则用下面的默认值。",
+    "llamaServer": "D:\\llama\\bin\\llama-server.exe",
+    "model": "D:\\llama\\models\\Qwen3.5-9B-IQ4_XS.gguf",
+    "displayName": "Qwen3.5-9B IQ4_XS",
+    "alias": "local-model",
+    "host": "127.0.0.1",
+    "port": 8090,
+
+    "context": 65536,
+    "threads": 8,
+    "batch": 1024,
+    "ubatch": 512,
+    "gpuLayers": 999,
+
+    "_modeHelp": "mode 选 modes 里的哪一套采样参数。翻译/精翻用 translate，写作用 creative。",
+    "mode": "translate",
+    "modes": {
+      "translate": {
+        "_why": "低温 + 关掉全部重复惩罚。游戏文本里同一个名字反复出现才是对的，惩罚它会让模型换说法，造成术语漂移。",
+        "temp": 0.2,
+        "topK": 20,
+        "topP": 0.9,
+        "minP": 0.02,
+        "repeatPenalty": 1.0,
+        "presencePenalty": 0.0,
+        "frequencyPenalty": 0.0,
+        "dryMultiplier": 0.0
+      },
+      "creative": {
+        "_why": "创作向：高温 + 重复惩罚开。给写小说、写散文用。",
+        "temp": 0.85,
+        "topK": 20,
+        "topP": 0.95,
+        "minP": 0.05,
+        "repeatPenalty": 1.35,
+        "presencePenalty": 0.2,
+        "frequencyPenalty": 0.2,
+        "dryMultiplier": 0.8
+      }
+    },
+
+    "_extraArgsHelp": "追加给 llama-server 的原始参数。--metrics 是使用统计必需的，别删。",
+    "extraArgs": [
+      "--no-mmproj",
+      "--load-mode", "none",
+      "-ctk", "q8_0", "-ctv", "q8_0", "-fa", "on",
+      "--fit", "off",
+      "--jinja",
+      "--reasoning-budget", "0",
+      "--cont-batching", "-np", "1",
+      "--cache-reuse", "256",
+      "--metrics",
+      "--ui"
+    ]
+  },
+
+  "usage": {
+    "_help": "使用统计。dshHome 留空则不统计 DSH 会话时间，只用 llama-server 的 token 计数。",
+    "enabled": true,
+    "dshHome": "",
+    "dshWebPort": 3080,
+    "idleGapSeconds": 300,
+    "sampleIntervalMinutes": 10
+  }
+}
