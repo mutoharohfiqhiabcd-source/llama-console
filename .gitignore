@@ -2,7 +2,7 @@
 server.log
 server.err.log
 usage/usage.json
-usage/sample.bat
+usage/sample.vbs
 
 # 自检/调试产物
 _layout.txt

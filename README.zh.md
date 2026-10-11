@@ -244,6 +244,20 @@ DSH 的会话文件是 **zstd 多帧拼接**的（一个文件几百帧），Nod
 **Q：使用时长看着偏大**
 `idleGapSeconds` 调小（比如 120）。它决定「多久没动静就算离开」。
 
+**Q：电脑每隔 10 分钟弹一个终端窗口**
+那是定时采样任务。老版本直接把 `.bat` 交给计划任务，而计划任务以 Interactive 模式跑 `.bat`
+会在你的用户会话里开一个 `cmd` 窗口；如果默认终端是 Windows Terminal，它还会把标签页留着显示
+`[已退出进程，代码为 0 (0x00000000)]`，看起来就像莫名其妙弹窗。
+
+新版改成用 `wscript.exe` 跑一个 VBS：`WScript.Shell.Run` 的窗口样式参数给 `0`（SW_HIDE），
+而 `wscript.exe` 本身是 GUI 子系统程序、不分配控制台，所以完全无窗口。
+
+已经装过旧版的，**重跑一次 `install.ps1`** 就会把任务换掉。
+
+顺带一个坑：任务是用**任务 XML** 而不是 `/tr` 参数建的 —— `/tr` 的值遇到带空格的路径会被
+`schtasks` 拆错（实测 `wscript.exe //B "D:\a b\sample.vbs"` 报 `Invalid argument '- 'b\sample.vbs'`）。
+XML 里路径走 `<Arguments>` 元素，空格由 XML 承载，没有解析歧义。
+
 **Q：中文在命令行里是乱码**
 `使用统计.bat` 里已经 `chcp 65001`。如果你自己调 `node usage\track.mjs`，
 先 `chcp 65001`，或在 Windows Terminal 里跑。
